@@ -21,7 +21,7 @@ test("Ditto Insurance typescript", async ({ page }) => {
   await details.openDiseaseList();
   await details.continueTillMembershipPage(); //Next Steps will be performed here
 
-  await members.selectMembers(); //selecting myself
+  await members.selectMembers(data.gender); //selecting myself
   await members.enterDetails(data.age, data.pincode);
   await members.clickCalculatePremium();
 

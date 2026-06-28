@@ -3,11 +3,11 @@ import { Page } from "@playwright/test";
 export class MemberDetailsPage {
   constructor(private page: Page) {}
 
-  async selectMembers() {
+  async selectMembers(gender: string) {
     await this.page
       .locator("div.mantine-Group-root")
       .filter({ hasText: /^SelfMaleFemale$/ })
-      .getByText("Male", { exact: true })
+      .getByText(gender, { exact: true })
       .click();
     await this.page.getByRole("button", { name: "Next step" }).click();
   }
