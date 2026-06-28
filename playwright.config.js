@@ -12,6 +12,7 @@ export default defineConfig({
   use: {
     trace: "on",
     headless: false,
+    baseURL: "https://app.joinditto.in",
   },
 
   /* Configure projects for major browsers */

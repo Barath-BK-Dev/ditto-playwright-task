@@ -1,31 +1,22 @@
 import { expect, test } from "@playwright/test";
-import { trace } from "node:console";
+import data from "../testData/ditto.json";
+import { DittoLandingPage } from "../pages/DittoLandingPage";
+import { PlanDetailPage } from "../pages/PlanDetailsPage";
 
-test("Ditto Insurance", async ({ page }) => {
-  await page.goto("/fq", {
-    waitUntil: "domcontentloaded",
-  });
+test("Ditto Insurance typescript", async ({ page }) => {
+  const landing = new DittoLandingPage(page);
+  const details = new PlanDetailPage(page);
+
+  await landing.goto();
+  await landing.selectPlan(data.insurer, data.plan);
   await expect(page.locator(".mantine-AppShell-root")).toBeVisible();
 
   //After card selection
-  await expect(page.locator("body")).toContainText(plan);
+  await details.verifyPlanSelected(data.plan);
+  await details.verifyMainBenifitsVisible();
+  await details.openDiseaseList();
+  await details.continueTillMembershipPage(); //Next Steps will be performed here
 
-  await expect(
-    page.getByRole("button", { name: "Main Benefits" }),
-  ).toBeVisible();
-
-  await page.getByRole("button", { name: "Next" }).click();
-
-  await page.getByRole("button", { name: "Full list" }).click();
-
-  await expect(
-    page.getByRole("heading", { name: "List of diseases", exact: true }),
-  ).toBeVisible({});
-  await page.getByRole("button", { name: "Close" }).click();
-  await page.getByRole("button", { name: "Next" }).click();
-  await page.getByRole("button", { name: "Next" }).click();
-  await page.getByRole("button", { name: "Continue" }).click();
-  await expect(page).toHaveURL(/\/members/);
   await page
     .locator("div.mantine-Group-root")
     .filter({ hasText: /^SelfMaleFemale$/ })
@@ -53,9 +44,7 @@ test("Ditto Insurance", async ({ page }) => {
     .getByRole("button", { name: "Other Add-ons (0/3)", exact: true })
     .click();
 
-  const addon = "Care OPD";
-
-  await page.locator(`input[name="${addon}"]`).first().check();
+  await page.locator(`input[name="${data.addon}"]`).first().check();
 
   await expect(premiumPrice).not.toHaveText(withoutAddOn);
 
