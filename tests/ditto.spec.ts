@@ -3,11 +3,13 @@ import data from "../testData/ditto.json";
 import { DittoLandingPage } from "../pages/DittoLandingPage";
 import { PlanDetailPage } from "../pages/PlanDetailsPage";
 import { MemberDetailsPage } from "../pages/MemberDetailsPage";
+import { PremiumPage } from "../pages/PremiumPage";
 
 test("Ditto Insurance typescript", async ({ page }) => {
   const landing = new DittoLandingPage(page);
   const details = new PlanDetailPage(page);
   const members = new MemberDetailsPage(page);
+  const premium = new PremiumPage(page);
 
   await landing.goto();
   await landing.selectPlan(data.insurer, data.plan);
@@ -23,24 +25,12 @@ test("Ditto Insurance typescript", async ({ page }) => {
   await members.enterDetails(data.age, data.pincode);
   await members.clickCalculatePremium();
 
-  const premiumPrice = page
-    .locator("div.mantine-Group-root")
-    .filter({ hasText: "Total Premium" })
-    .locator("span")
-    .last();
+  const priceWithoutAddOn = await premium.getPremiumPrice();
+  console.log(`Total Premium Without add on: ` + priceWithoutAddOn);
 
-  const withoutAddOn = await premiumPrice.innerText();
-
-  console.log(`Total Premium Without add on: ` + withoutAddOn);
-
-  await page
-    .getByRole("button", { name: "Other Add-ons (0/3)", exact: true })
-    .click();
-
-  await page.locator(`input[name="${data.addon}"]`).first().check();
-
-  await expect(premiumPrice).not.toHaveText(withoutAddOn);
-
-  const withAddOn = await premiumPrice.innerText();
-  console.log(`Total Premium: ` + withAddOn);
+  await premium.openAddOn();
+  await premium.selectAddOn(data.addon);
+  await premium.verifyPremiumChanged(priceWithoutAddOn);
+  const withAddOn = await premium.getPremiumPrice();
+  console.log(`Total Premium with add on: ` + withAddOn);
 });
