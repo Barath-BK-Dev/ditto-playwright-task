@@ -9,19 +9,26 @@ export class PremiumPage {
       .locator("span")
       .last();
   }
+  get addonButton() {
+    return this.page.getByRole("button", {
+      name: "Other Add-ons (0/3)",
+      exact: true,
+    });
+  }
+  addon(addon: string): Locator {
+    return this.page.locator(`input[name="${addon}"]`).first();
+  }
 
   async getPremiumPrice() {
     return await this.premiumPrice.innerText();
   }
 
   async openAddOn() {
-    await this.page
-      .getByRole("button", { name: "Other Add-ons (0/3)", exact: true })
-      .click();
+    await this.addonButton.click();
   }
 
   async selectAddOn(addon: string) {
-    await this.page.locator(`input[name="${addon}"]`).first().check();
+    await this.addon(addon).check();
   }
 
   async verifyPremiumChanged(oldPremium: string) {
