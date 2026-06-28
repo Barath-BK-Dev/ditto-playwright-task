@@ -2,10 +2,12 @@ import { expect, test } from "@playwright/test";
 import data from "../testData/ditto.json";
 import { DittoLandingPage } from "../pages/DittoLandingPage";
 import { PlanDetailPage } from "../pages/PlanDetailsPage";
+import { MemberDetailsPage } from "../pages/MemberDetailsPage";
 
 test("Ditto Insurance typescript", async ({ page }) => {
   const landing = new DittoLandingPage(page);
   const details = new PlanDetailPage(page);
+  const members = new MemberDetailsPage(page);
 
   await landing.goto();
   await landing.selectPlan(data.insurer, data.plan);
@@ -17,18 +19,9 @@ test("Ditto Insurance typescript", async ({ page }) => {
   await details.openDiseaseList();
   await details.continueTillMembershipPage(); //Next Steps will be performed here
 
-  await page
-    .locator("div.mantine-Group-root")
-    .filter({ hasText: /^SelfMaleFemale$/ })
-    .getByText("Male", { exact: true })
-    .click();
-  await page.getByRole("button", { name: "Next step" }).click();
-
-  await page.getByPlaceholder("Your age").fill("27");
-  await page.getByPlaceholder("Enter your pin code").fill("560066");
-
-  //   await page.getByRole("radio", { name: "No" }).check();
-  await page.getByRole("button", { name: "Calculate Premium" }).click();
+  await members.selectMembers(); //selecting myself
+  await members.enterDetails(data.age, data.pincode);
+  await members.clickCalculatePremium();
 
   const premiumPrice = page
     .locator("div.mantine-Group-root")
