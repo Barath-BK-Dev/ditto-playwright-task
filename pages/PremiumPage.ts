@@ -9,6 +9,20 @@ export class PremiumPage {
       .locator("span")
       .last();
   }
+  get basePremiumPrice(): Locator {
+    return this.page
+      .locator("div.mantine-Group-root")
+      .filter({ hasText: "Base Premium" })
+      .locator("span")
+      .last();
+  }
+  get addonPrice(): Locator {
+    return this.page
+      .locator("div.mantine-Group-root")
+      .filter({ hasText: /^Other Add-ons/ })
+      .locator("span")
+      .last();
+  }
   get addonButton() {
     return this.page.getByRole("button", {
       name: "Other Add-ons (0/3)",
@@ -21,6 +35,12 @@ export class PremiumPage {
 
   async getPremiumPrice() {
     return await this.premiumPrice.innerText();
+  }
+  async getBasePremiumPrice() {
+    return await this.basePremiumPrice.innerText();
+  }
+  async getAddonPrice() {
+    return await this.addonPrice.innerText();
   }
 
   async openAddOn() {

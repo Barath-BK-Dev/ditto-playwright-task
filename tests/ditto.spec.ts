@@ -25,12 +25,30 @@ test("Ditto Insurance typescript", async ({ page }) => {
   await members.enterDetails(data.age, data.pincode);
   await members.clickCalculatePremium();
 
+  //Getting Base premium price and addon price seperately and Math for Total price
+  const basePremiumPrice = await premium.getBasePremiumPrice();
+  const addonPrice = await premium.getAddonPrice();
+  console.log("--------Before Add-ons---------");
+
+  console.log(`Base Premium Price: ${basePremiumPrice}`);
+  console.log(`Add-ons Price: ${addonPrice}`);
+
   const priceWithoutAddOn = await premium.getPremiumPrice();
   console.log(`Total Premium Without add on: ` + priceWithoutAddOn);
 
   await premium.openAddOn();
   await premium.selectAddOn(data.addon);
+
+  console.log("--------After Add-ons---------");
+
   await premium.verifyPremiumChanged(priceWithoutAddOn);
-  const withAddOn = await premium.getPremiumPrice();
-  console.log(`Total Premium with add on: ` + withAddOn);
+
+  const updatedAddonPrice = await premium.getAddonPrice();
+  console.log(`Base Premium Price: ${basePremiumPrice}`);
+  console.log(`Add-ons Price: ${updatedAddonPrice}`);
+  const premiumWithAddon = await premium.getPremiumPrice();
+  await expect(parseInt(basePremiumPrice) + parseInt(updatedAddonPrice)).toBe(
+    parseInt(premiumWithAddon),
+  );
+  console.log(`Total Premium with add on: ` + premiumWithAddon);
 });
