@@ -19,9 +19,11 @@ export class DittoLandingPage extends BasePage {
 
   async goto() {
     await super.goto("/fq");
+    this.log("Launching Ditto.....");
   }
   async selectPlan(insurer: string, plan: string) {
     //card selection
     await this.plan(insurer, plan).click();
+    this.log(`Selecting Plan: ${insurer} - ${plan}`);
   }
 }

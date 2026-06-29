@@ -1,7 +1,10 @@
 import { Locator, Page } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
-export class MemberDetailsPage {
-  constructor(private page: Page) {}
+export class MemberDetailsPage extends BasePage {
+  constructor(protected page: Page) {
+    super(page);
+  }
   get nextStepButton(): Locator {
     return this.page.getByRole("button", { name: "Next step" });
   }
@@ -24,12 +27,15 @@ export class MemberDetailsPage {
   async selectMembers(gender: string) {
     await this.gender(gender).click();
     await this.nextStepButton.click();
+    this.log(`Selecting gender: ${gender}`);
   }
   async fillMemberDetails(age: string, pincode: string) {
     await this.ageTextBox.fill(age);
     await this.pincodeTextBox.fill(pincode);
+    this.log("Filling member details...");
   }
   async clickCalculatePremium() {
     await this.calculatePremiumButton.click();
+    this.log("Calculating premium...");
   }
 }

@@ -1,7 +1,10 @@
 import { Locator, Page, expect } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
-export class PlanDetailPage {
-  constructor(private page: Page) {}
+export class PlanDetailPage extends BasePage {
+  constructor(protected page: Page) {
+    super(page);
+  }
 
   get nextStepButton(): Locator {
     return this.page.getByRole("button", { name: "Next" });
@@ -27,8 +30,9 @@ export class PlanDetailPage {
 
   async verifySelectedPlan(plan: string) {
     await expect(this.page.locator("body")).toContainText(plan);
+    this.log("Plan Selected");
   }
-  async verifyMainBenifitsVisible() {
+  async verifyMainBenefitsVisible() {
     await expect(this.mainBenifitButton).toBeVisible();
   }
   async openDiseaseList() {
@@ -36,11 +40,13 @@ export class PlanDetailPage {
     await this.fullListButton.click();
     await expect(this.diseaseHeading).toBeVisible({});
     await this.closeButton.click();
+    this.log("Opening disease list...");
   }
   async proceedToMemberDetails() {
     await this.nextStepButton.click();
     await this.nextStepButton.click();
     await this.continuousButton.click();
     await expect(this.page).toHaveURL(/\/members/);
+    this.log("Proceeding to member details...");
   }
 }

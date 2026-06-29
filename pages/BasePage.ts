@@ -5,4 +5,8 @@ export class BasePage {
   async goto(url: string) {
     await this.page.goto(url);
   }
+
+  protected log(message: string) {
+    console.log(`[${new Date().toLocaleTimeString()}] ${message}`);
+  }
 }
