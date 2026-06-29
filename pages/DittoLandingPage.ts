@@ -1,7 +1,10 @@
 import { Locator, Page } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
-export class DittoLandingPage {
-  constructor(private page: Page) {}
+export class DittoLandingPage extends BasePage {
+  constructor(protected page: Page) {
+    super(page);
+  }
 
   plan(insurer: string, plan: string): Locator {
     return this.page
@@ -15,7 +18,7 @@ export class DittoLandingPage {
   }
 
   async goto() {
-    await this.page.goto("/fq");
+    await super.goto("/fq");
   }
   async selectPlan(insurer: string, plan: string) {
     //card selection

@@ -42,16 +42,13 @@ export class PremiumPage {
   async getAddonPrice() {
     return await this.addonPrice.innerText();
   }
-
   async openAddOn() {
     await this.addonButton.click();
   }
-
   async selectAddOn(addon: string) {
     await this.addon(addon).check();
   }
-
-  async verifyPremiumChanged(oldPremium: string) {
+  async verifyPremiumUpdated(oldPremium: string) {
     await expect(this.premiumPrice).not.toHaveText(oldPremium);
   }
 }

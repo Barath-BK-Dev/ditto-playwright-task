@@ -25,7 +25,7 @@ export class MemberDetailsPage {
     await this.gender(gender).click();
     await this.nextStepButton.click();
   }
-  async enterDetails(age: string, pincode: string) {
+  async fillMemberDetails(age: string, pincode: string) {
     await this.ageTextBox.fill(age);
     await this.pincodeTextBox.fill(pincode);
   }

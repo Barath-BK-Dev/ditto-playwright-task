@@ -25,7 +25,7 @@ export class PlanDetailPage {
     return this.page.getByRole("button", { name: "Continue" });
   }
 
-  async verifyPlanSelected(plan: string) {
+  async verifySelectedPlan(plan: string) {
     await expect(this.page.locator("body")).toContainText(plan);
   }
   async verifyMainBenifitsVisible() {
@@ -37,7 +37,7 @@ export class PlanDetailPage {
     await expect(this.diseaseHeading).toBeVisible({});
     await this.closeButton.click();
   }
-  async continueTillMembershipPage() {
+  async proceedToMemberDetails() {
     await this.nextStepButton.click();
     await this.nextStepButton.click();
     await this.continuousButton.click();

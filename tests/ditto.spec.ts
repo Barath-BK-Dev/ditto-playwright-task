@@ -16,13 +16,13 @@ test("Ditto Insurance typescript", async ({ page }) => {
   await expect(page.locator(".mantine-AppShell-root")).toBeVisible();
 
   //After card selection
-  await details.verifyPlanSelected(data.plan);
+  await details.verifySelectedPlan(data.plan);
   await details.verifyMainBenifitsVisible();
   await details.openDiseaseList();
-  await details.continueTillMembershipPage(); //Next Steps will be performed here
+  await details.proceedToMemberDetails(); //Next Steps will be performed here
 
   await members.selectMembers(data.gender); //selecting myself
-  await members.enterDetails(data.age, data.pincode);
+  await members.fillMemberDetails(data.age, data.pincode);
   await members.clickCalculatePremium();
 
   //Getting Base premium price and addon price seperately and Math for Total price
@@ -33,15 +33,15 @@ test("Ditto Insurance typescript", async ({ page }) => {
   console.log(`Base Premium Price: ${basePremiumPrice}`);
   console.log(`Add-ons Price: ${addonPrice}`);
 
-  const priceWithoutAddOn = await premium.getPremiumPrice();
-  console.log(`Total Premium Without add on: ` + priceWithoutAddOn);
+  const TotalPriceWithoutAddOn = await premium.getPremiumPrice();
+  console.log(`Total Premium Without add on: ` + TotalPriceWithoutAddOn);
 
   await premium.openAddOn();
   await premium.selectAddOn(data.addon);
 
   console.log("--------After Add-ons---------");
 
-  await premium.verifyPremiumChanged(priceWithoutAddOn);
+  await premium.verifyPremiumUpdated(TotalPriceWithoutAddOn);
 
   const updatedAddonPrice = await premium.getAddonPrice();
   console.log(`Base Premium Price: ${basePremiumPrice}`);
