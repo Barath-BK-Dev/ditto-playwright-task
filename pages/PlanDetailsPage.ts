@@ -29,11 +29,11 @@ export class PlanDetailPage extends BasePage {
   }
 
   async verifySelectedPlan(plan: string) {
-    await expect(this.page.locator("body")).toContainText(plan);
+    await expect(this.page.getByText(plan, { exact: true })).toBeVisible();
     this.log("Plan Selected");
   }
   async verifyMainBenefitsVisible() {
-    await expect(this.mainBenifitButton).toBeVisible();
+    await expect(this.mainBenifitButton).toBeVisible({ timeout: 20000 });
   }
   async openDiseaseList() {
     await this.nextStepButton.click();

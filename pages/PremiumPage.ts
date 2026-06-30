@@ -69,4 +69,12 @@ export class PremiumPage extends BasePage {
     this.log(`Add-on Price : ${await this.getAddonPrice()} `);
     this.log(`Total Premium : ${await this.getPremiumPrice()} `);
   }
+  async takeScreenshot(name: string) {
+    await this.page.screenshot({
+      path: `screenshots/${name}.png`,
+      fullPage: true,
+    });
+
+    this.log(`Screenshot captured: ${name}`);
+  }
 }

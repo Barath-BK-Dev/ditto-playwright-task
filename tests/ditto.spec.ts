@@ -28,6 +28,7 @@ test("Ditto Insurance typescript", async ({ page }) => {
   //Getting Base premium price and addon price seperately and Math for Total price
   const totalPremiumBeforeAddon = await premium.getPremiumPrice();
   await premium.logPremiumBreakdown("Before Add-ons");
+  await premium.takeScreenshot("Premium-Before-Addon");
   await premium.verifyPremiumCalculation();
 
   await premium.openAddOn();
@@ -35,5 +36,6 @@ test("Ditto Insurance typescript", async ({ page }) => {
   await premium.verifyPremiumUpdated(totalPremiumBeforeAddon);
 
   await premium.logPremiumBreakdown("After Add-ons");
+  await premium.takeScreenshot("Premium-After-Addon");
   await premium.verifyPremiumCalculation();
 });
